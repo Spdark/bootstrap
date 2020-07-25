@@ -1,0 +1,40 @@
+body {
+	width: 100vw;
+	height: 100vh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: url("3.jpg");
+	overflow: hidden;
+}
+.card {
+	align-content: center;
+
+	width: 1000px;
+	height: 500px;
+
+	font-family: roboto;
+	border-radius: 30px;
+	
+	box-shadow: 5px 5px 15px rgba(0,0,0,0,9);
+	text-align: center;
+	transition: 0.4s ease;
+	cursor: pointer;
+}
+.card:hover {
+	transform: scale(1.2);
+	box-shadow: 5px 5px 15px rgba(0,0,0,0,6);
+}
+.card-img-center{
+	width: 10%;
+	height: 20%;
+	border-radius: 15px;
+	bottom: 50%;
+	align-self: center;
+	position: relative;
+	top: 50%;
+}
+.card-img-center:hover{
+	transform: scale(1.2);
+	box-shadow: 5px 5px 15px rgba(0,0,0,0,6);
+}

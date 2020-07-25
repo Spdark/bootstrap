@@ -1,0 +1,166 @@
+<div id="stepProgressBar">
+
+	<div class="step">
+		<p class="step-text">Importer</p>
+		<div class="bullet">1</div>
+	</div>
+	<div class="step">
+		<p class="step-text">Custom</p>
+		<div class="bullet">2</div>
+		
+	</div>
+	<div class="step">
+		<p class="step-text">Exporter Bank</p>
+		<div class="bullet">3</div>
+		
+	</div>
+	<div class="step">
+		<p class="step-text">Custom</p>
+		<div class="bullet ">4</div>
+		
+	</div>
+	<div class="step">
+		<p class="step-text">Exporter</p>
+		<div class="bullet ">5</div>
+	</div>
+	<br>
+</div>
+<div id="main">
+	<p id="content"  class="text-center">Bill of Landing is with Importer</p>
+	<center>
+	
+	<input type="button" value="Next" name="nextBtn" id="nextBtn">
+
+	</center>
+</div>
+<br>
+<div id= "msg"></div>
+
+<style>
+	
+#stepProgressBar  {
+	display:  flex;
+	justify-content:  space-between;
+	align-items:  flex-end;
+	width:  300px;
+	margin:  0  auto;
+	margin-bottom:  40px;
+}
+
+img {
+	width:100px;
+	margin-bottom: 5px;
+}
+
+.step  {
+text-align:  center;
+}
+
+.step-text  {
+margin-bottom:  10px;
+color:  #28a745;
+}
+
+
+.bullet {
+	border: 1px solid #28a745;
+	height: 20px;
+	width: 20px;
+	border-radius: 100%;
+	color: #28a745;
+	display: inline-block;
+	position: relative;
+	transition: background-color 500ms;
+  line-height:20px;
+}
+
+
+.bullet.completed  {
+	color:  white;
+	background-color:  #28a745;
+}
+
+
+
+.bullet.completed::after {
+	content: '';
+	position: absolute;
+	right: -55px;
+	bottom: 10px;
+	height: 1px;
+	width: 54px;
+	background-color: #28a745;
+}
+
+/* Base styles and helper stuff */
+.hidden  {
+	display:  none;
+}
+ 
+button  {
+	align-content: center;
+	padding:  5px  10px;
+	border:  1px  solid  black;
+	transition:  250ms background-color;
+}
+
+button:hover  {
+	cursor:  pointer;
+	background-color:  black;
+	color:  white;
+}
+
+button:disabled:hover  {
+	opacity:  0.6;
+	cursor:  not-allowed;
+}
+
+.text-center  {
+	text-align:  center;
+}
+  
+.container  {
+	max-width:  400px;
+	margin:  0  auto;
+	margin-top:  20px;
+	padding:  40px;
+}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+<script>
+const  nextBtn  =  document.getElementById('nextBtn');
+const  content  =  document.getElementById('content');
+const  bullets  =  [...document.querySelectorAll('.bullet')];
+
+const MAX_STEPS = 4;
+let currentStep = 0;
+let count = 1;
+
+nextBtn.addEventListener('click',  ()  =>  
+{
+
+	bullets[count  -  1].classList.add('completed');
+	currentStep  +=  1;
+	count += 1;
+	if  (currentStep  ===  MAX_STEPS) 
+	{
+		nextBtn.disabled  =  true;
+	}
+	const socket = io.connect("http://127.0.0.1:5001");
+	content.innerText  =  `Step Number ${currentStep}`;
+	 socket.on('connect', function () {
+            if (currentStep) {
+                socket.emit('send_message', {
+                    currentStep: currentStep
+                })
+            }
+        });
+	 socket.on('receive_message', function (data) {
+        console.log(data);
+        const newNode = document.createElement('div');
+        newNode.innerHTML = `${data.msg}`;
+        document.getElementById('msg').appendChild(newNode);
+    });
+});
+
+</script>
